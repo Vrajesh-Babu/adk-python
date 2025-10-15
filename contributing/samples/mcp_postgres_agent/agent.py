@@ -15,12 +15,10 @@
 import os
 
 from dotenv import load_dotenv
-from google.adk.models.gemma_llm import Gemma
-from google.genai.types import GenerateContentConfig
-
 from google.adk.agents.llm_agent import LlmAgent
 from google.adk.tools.mcp_tool import StdioConnectionParams
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.genai.types import GenerateContentConfig
 from mcp import StdioServerParameters
 
 load_dotenv()
@@ -35,19 +33,13 @@ root_agent = LlmAgent(
         "Use the provided tools to query, manage, and interact with "
         "the PostgreSQL database. Ask clarifying questions when unsure."
     ),
-
     tools=[
         MCPToolset(
             connection_params=StdioConnectionParams(
                 server_params=StdioServerParameters(
-                    command='uvx',
-                    args=[
-                        'postgres-mcp',
-                        '--access-mode=unrestricted'
-                    ],
-                    env={
-                        "DATABASE_URI": POSTGRES_CONNECTION_STRING
-                    }
+                    command="uvx",
+                    args=["postgres-mcp", "--access-mode=unrestricted"],
+                    env={"DATABASE_URI": POSTGRES_CONNECTION_STRING},
                 ),
                 timeout=60,
             ),
@@ -56,5 +48,5 @@ root_agent = LlmAgent(
     generate_content_config=GenerateContentConfig(
         temperature=1.0,
         top_p=0.95,
-    )
+    ),
 )
