@@ -24,6 +24,11 @@ from mcp import StdioServerParameters
 load_dotenv()
 
 POSTGRES_CONNECTION_STRING = os.getenv("POSTGRES_CONNECTION_STRING")
+if not POSTGRES_CONNECTION_STRING:
+    raise ValueError(
+        "POSTGRES_CONNECTION_STRING environment variable not set. "
+        "Please create a .env file with this variable."
+    )
 
 root_agent = LlmAgent(
     model="gemini-2.0-flash",
@@ -46,7 +51,7 @@ root_agent = LlmAgent(
         )
     ],
     generate_content_config=GenerateContentConfig(
-        temperature=1.0,
+        temperature=0.2,
         top_p=0.95,
     ),
 )
